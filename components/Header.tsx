@@ -1,10 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { SearchIcon } from 'lucide-react';
 import { SearchResult } from './SearchBar';
 import { SearchBarClient } from './SearchBarClient';
-import { error } from 'console';
 
 interface HeaderProps {
   exercises: SearchResult[];

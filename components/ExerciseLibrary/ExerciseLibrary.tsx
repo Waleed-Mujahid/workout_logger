@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import MuscleGroupTabs from './MuscleGroupTab';
-import { getExercises } from '@/db/exercises';
-import { Exercise } from '@/lib/types';
+import { getUserExercises } from '@/db/exercises';
+import { Exercise } from '@/lib/schema';
 
 const ExerciseLibrary: React.FC = () => {
-  const [exercises, setExercises] = useState<Exercise[] | null>(null);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const { stats, error } = await getExercises();
+        const { stats, error } = await getUserExercises();
         if (error) {
           setError('Failed to fetch exercises');
         } else {

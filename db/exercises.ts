@@ -1,11 +1,11 @@
 'use server'
 import { createClient } from "@/utils/supabase/server";
 
-export const getExercises = async () => {
+export const getUserExercises = async () => {
     const supabase = createClient();
 
     const { data: stats, error } = await supabase
-        .from("exercises")
+        .from("user_exercises")
         .select("*")
 
 

@@ -26,8 +26,8 @@ const ExerciseList: React.FC<ExerciseListProps> = ({ muscleGroup, exercises, loa
                             <Skeleton className="h-4 w-1/2" />
                         </div>
                     ))
-                    : filteredExercises?.slice(0, 5).map((exercise) => (
-                        <ResponsiveDetailWrapper key={exercise.name} exercise={exercise} />
+                    : filteredExercises?.slice(0, 5).map((exercise, index) => (
+                        <ResponsiveDetailWrapper key={index} exercise={exercise} />
                     ))}
             </div>
         </ScrollArea>
