@@ -1,8 +1,8 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ExerciseList from './ExerciseList';
-import { Exercise } from '@/lib/schema';
 import { DumbbellIcon, LeafIcon, HandIcon, SendToBackIcon, ActivityIcon, HeartPulseIcon } from 'lucide-react';
+import { Exercises_library } from '@/db/types';
 
 const muscleGroups = [
     { name: 'Biceps', icon: DumbbellIcon },
@@ -13,7 +13,7 @@ const muscleGroups = [
     { name: 'Abs', icon: ActivityIcon },
 ];
 
-const MuscleGroupTabs: React.FC<{ exercises: Exercise[] | null; loading: boolean }> = ({ exercises, loading }) => {
+const MuscleGroupTabs: React.FC<{ exercises: Exercises_library[] | null; loading: boolean }> = ({ exercises, loading }) => {
     return (
         <Tabs defaultValue={muscleGroups[0].name.toLowerCase()}>
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 h-min lg:grid-cols-6">

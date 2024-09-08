@@ -5,7 +5,7 @@ export const getUserExercises = async () => {
     const supabase = createClient();
 
     const { data: stats, error } = await supabase
-        .from("user_exercises")
+        .from("exercises_library")
         .select("*")
 
 

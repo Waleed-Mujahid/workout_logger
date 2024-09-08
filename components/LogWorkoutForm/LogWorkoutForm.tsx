@@ -1,10 +1,8 @@
-// LogWorkoutForm.tsx
 'use client'
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { WorkoutSession, WorkoutSessionSchema } from "@/lib/schema";
 import { saveWorkoutData } from "@/db/workout_sessions";
@@ -14,21 +12,18 @@ import TraditionalWorkoutForm from "./TraditionalWorkoutForm";
 import CardioWorkoutForm from "./CardioWorkoutForm";
 import YogaWorkoutForm from "./YogaWorkoutForm";
 import CommonWorkoutFields from "./CommonWorkoutFields";
+import { mutate } from "swr";
+import LoadingButton from "../shared/LoadingButton";
+import useUserWorkoutSessions from "@/hooks/useUserWorkoutSessions";
 
 export const LogWorkoutForm: React.FC = () => {
     const [workoutType, setWorkoutType] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { mutate: sessionMutate } = useUserWorkoutSessions();
 
     const form = useForm<WorkoutSession>({
-        resolver: zodResolver(WorkoutSessionSchema),
-        defaultValues: {
-            date: new Date(),
-            workout: { type: undefined },
-            total_duration: 0,
-            calories_burned: 0,
-            notes: "",
-        },
+        resolver: zodResolver(WorkoutSessionSchema)
     });
 
     const onSubmit = async (data: WorkoutSession) => {
@@ -36,8 +31,13 @@ export const LogWorkoutForm: React.FC = () => {
         setError(null);
         try {
             await saveWorkoutData(data);
-            console.log("Workout submitted successfully");
+            Promise.all([
+                mutate("workout_stats"),
+                sessionMutate(),
+            ]);
             form.reset();
+            const dashboard = document.getElementById("Dashboard");
+            dashboard?.scrollIntoView({ behavior: "smooth" });
         } catch (err) {
             setError(err instanceof Error ? err.message : "An unexpected error occurred");
         } finally {
@@ -68,9 +68,9 @@ export const LogWorkoutForm: React.FC = () => {
 
                         {error && <p className="text-red-500 text-center">{error}</p>}
 
-                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        <LoadingButton type="submit" className="w-full" loading={isSubmitting}>
                             {isSubmitting ? "Saving..." : "Save Workout"}
-                        </Button>
+                        </LoadingButton>
                     </form>
                 </Form>
             </CardContent>

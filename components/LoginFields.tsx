@@ -7,7 +7,12 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 
-function LoginFields({ errors }: { errors: any }) {
+interface LoginFieldsProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errors: any;
+}
+
+function LoginFields({ errors }: LoginFieldsProps) {
     return (
         <>
             <FormField

@@ -63,7 +63,13 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.fc-day-grid-container.fc-scroller {
+  height: auto !important;
+  overflow-y: auto;
 }

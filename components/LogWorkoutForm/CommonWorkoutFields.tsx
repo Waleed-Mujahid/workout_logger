@@ -57,11 +57,10 @@ const CommonWorkoutFields: React.FC<CommonWorkoutFieldsProps> = ({ control }) =>
                 name="date"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Date</FormLabel>
                         <FormControl>
                             <Input
                                 type="date"
-                                placeholder="Workout date"
+                                placeholder="Data de nascimento"
                                 {...field}
                                 value={
                                     field.value instanceof Date

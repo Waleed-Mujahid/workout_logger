@@ -13,6 +13,20 @@ const parseNumber = (value: unknown) => {
   }
 };
 
+const parseDate = (value: unknown): Date | undefined => {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  // Check if value is a valid type for the Date constructor
+  if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
+    return new Date(value);
+  }
+
+  // Return undefined if the value is not a valid type for Date
+  return undefined;
+}
+
 // Enum for workout types
 const WorkoutTypeEnum = z.enum(["hiit", "traditional", "cardio", "yoga"]);
 
@@ -24,6 +38,15 @@ export const MuscleGroupEnum = z.enum([
   "shoulders",
   "back",
   "abs",
+]);
+
+export const WorkoutEquipmentEnum = z.enum([
+  "dumbbells",
+  "barbell",
+  "kettlebell",
+  "resistance bands",
+  "bodyweight",
+  "machines",
 ]);
 
 // Schema for a single exercise
@@ -75,7 +98,7 @@ const WorkoutSchema = z.discriminatedUnion("type", [
 // Schema for a completed workout session
 export const WorkoutSessionSchema = z.object({
   // id: z.string().uuid(),
-  date: z.date(),
+  date: z.preprocess(parseDate, z.date()),
   workout: WorkoutSchema,
   total_duration: z.preprocess(parseNumber, z.number()), // in minutes
   calories_burned: z.preprocess(parseNumber, z.number()),
@@ -138,16 +161,27 @@ export const RegisterSchema = z
     path: ["confirm_password"], // path of error
   });
 
-export type RegisterFormValues = z.infer<typeof RegisterSchema>;
 
 export const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string(),
 });
 
-export type LoginFormValues = z.infer<typeof LoginSchema>;
+export const goalSchema = z.object({
+  goal_name: z.string().min(1, "Goal name is required"),
+  progress: z.number().min(0, "Progress must be at least 0"),
+  target: z.number().min(0, "Target must be at least 0")
+}).refine(data => data.progress <= data.target, {
+  message: "Progress must be less than or equal to target",
+  path: ["progress"]
+});
 
+export type GoalFormData = z.infer<typeof goalSchema>;
+export type RegisterFormValues = z.infer<typeof RegisterSchema>;
+export type LoginFormValues = z.infer<typeof LoginSchema>;
 export type Exercise = z.infer<typeof ExerciseSchema>;
 export type WorkoutTrackerApp = z.infer<typeof WorkoutTrackerAppSchema>;
 export type WorkoutSession = z.infer<typeof WorkoutSessionSchema>;
 export type WorkoutStats = z.infer<typeof WorkoutStatsSchema>;
+export type MuscleGroup = z.infer<typeof MuscleGroupEnum>;
+export type WorkoutEquipment = z.infer<typeof WorkoutEquipmentEnum>;

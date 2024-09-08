@@ -22,12 +22,7 @@ const TraditionalWorkoutForm: React.FC<TraditionalWorkoutFormProps> = ({ control
                 onClick={() => append({
                     name: "",
                     muscle_group: "biceps",
-                    sets: 0,
-                    reps: 0,
-                    weight: 0,
-                    duration: 0,
-                    rest_time: 0,
-                    notes: "write notes here",
+                    notes: "",
                 })}
             >
                 Add Exercise

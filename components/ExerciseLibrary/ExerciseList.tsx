@@ -2,11 +2,11 @@ import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import ResponsiveDetailWrapper from './ResponsiveDetailWrapper';
-import { Exercise } from '@/lib/schema';
+import { Exercises_library } from '@/db/types';
 
 interface ExerciseListProps {
     muscleGroup: string;
-    exercises: Exercise[] | null;
+    exercises: Exercises_library[] | null;
     loading: boolean;
 }
 

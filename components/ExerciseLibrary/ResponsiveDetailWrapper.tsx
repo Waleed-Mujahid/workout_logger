@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerTrigger } from '@/components/ui/drawer';
 import ExerciseDetail from './ExerciseDetail';
-import { Exercise } from '@/lib/schema';
+import { Exercises_library } from '@/db/types';
 
 interface ResponsiveDetailWrapperProps {
-    exercise: Exercise;
+    exercise: Exercises_library;
 }
 
 const ResponsiveDetailWrapper: React.FC<ResponsiveDetailWrapperProps> = ({ exercise }) => {

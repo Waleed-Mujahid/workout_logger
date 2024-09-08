@@ -1,5 +1,3 @@
-import { SearchBarClient } from './SearchBarClient'
-
 interface WgerExercise {
   id: number;
   name: string;

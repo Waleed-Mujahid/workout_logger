@@ -1,17 +1,136 @@
 'use server'
 import getUserId from "@/hooks/getUserId";
-import { WorkoutSession } from "@/lib/schema";
+import { WorkoutSession as WorkoutSessionSchema } from "@/lib/schema";
+import { WorkoutSession, Exercise } from '@/db/types';
 import { createClient } from "@/utils/supabase/server";
 
+const getMostRecentWorkoutSession = async (): Promise<{ session: WorkoutSession | null; exercises: Exercise[] | null; error: boolean }> => {
+    const supabase = createClient();
+    const userId = await getUserId();
 
-export async function saveWorkoutData(data: WorkoutSession) {
+    const { data, error } = await supabase
+        .from("workout_sessions")
+        .select(`
+            id,
+            date,
+            workout_type,
+            total_duration,
+            calories_burned,
+            notes,
+            workout_exercises (
+                exercise_id,
+                user_exercises (
+                    name,
+                    muscle_group,
+                    sets,
+                    reps,
+                    weight,
+                    duration,
+                    rest_time,
+                    notes
+                )
+            )
+        `)
+        .eq("user_id", userId)
+        .order("date", { ascending: false })
+        .limit(1);
+
+
+    if (error || !data || data.length === 0) {
+        return { session: null, exercises: null, error: true };
+    }
+
+    const sessionData = data[0];
+
+    const exercises = sessionData.workout_exercises.map((workoutExercise: any) => workoutExercise.user_exercises);
+    return {
+        session: {
+            id: sessionData.id,
+            date: new Date(sessionData.date),
+            workout_type: sessionData.workout_type,
+            total_duration: sessionData.total_duration,
+            calories_burned: sessionData.calories_burned,
+            notes: sessionData.notes,
+            user_id: userId,
+        } as WorkoutSession,
+        exercises: exercises as Exercise[],
+        error: false,
+    };
+};
+
+export const getUserWorkoutSessions = async (): Promise<{ sessions: WorkoutSession[] | null; error: boolean }> => {
+    const supabase = createClient();
+    const userId = await getUserId();
+
+    const { data, error } = await supabase
+        .from("workout_sessions")
+        .select(`
+            id,
+            date,
+            workout_type,
+            total_duration,
+            calories_burned,
+            notes,
+            workout_exercises (
+                exercise_id,
+                user_exercises (
+                    name,
+                    muscle_group,
+                    sets,
+                    reps,
+                    weight,
+                    duration,
+                    rest_time,
+                    notes
+                )
+            )
+        `)
+        .eq("user_id", userId)
+        .order("date", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+        return { sessions: null, error: true };
+    }
+
+    const sessions = data.map((sessionData: any) => {
+        const exercises = sessionData.workout_exercises.map((workoutExercise: any) => workoutExercise.user_exercises);
+        return {
+            id: sessionData.id,
+            date: new Date(sessionData.date),
+            workout_type: sessionData.workout_type,
+            total_duration: sessionData.total_duration,
+            calories_burned: sessionData.calories_burned,
+            notes: sessionData.notes,
+            user_id: userId,
+            exercises: exercises as Exercise[],
+        } as WorkoutSession;
+    });
+
+    return { sessions, error: false };
+};
+
+export const fetchMostRecentWorkoutSession = async () => {
+    try {
+        const { session, exercises, error } = await getMostRecentWorkoutSession();
+        if (error) {
+            throw new Error('Error fetching workout session');
+        }
+        return { session, exercises };
+    } catch (err) {
+        console.error('Failed to fetch workout session:', err);
+        throw err;
+    }
+};
+
+
+
+export async function saveWorkoutData(data: WorkoutSessionSchema) {
     const { date, workout, total_duration, calories_burned, notes } = data;
     const supabase = createClient();
     const user_id = await getUserId();
     const yoga_style = workout.type === 'yoga' ? workout.style : null;
     const HITT_rounds = workout.type === 'hiit' ? workout.rounds : null;
     const HITT_rest = workout.type === 'hiit' ? workout.rest : null;
-
     // Start a transaction
     const { data: workoutSessionData, error: workoutSessionError } = await supabase
         .from('workout_sessions')
@@ -34,7 +153,6 @@ export async function saveWorkoutData(data: WorkoutSession) {
     }
 
     const workoutSessionId = workoutSessionData.id;
-
     if (workout.type === 'cardio' || workout.type === 'yoga') {
         return;
     }

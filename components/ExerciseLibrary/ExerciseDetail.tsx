@@ -1,13 +1,8 @@
 import React from 'react';
-import { Clock, Weight, Repeat, ClipboardList, RotateCcw } from 'lucide-react';
-import ExerciseInfoItem from './ExerciseInfoItem';
-import { Exercise } from '@/lib/schema';
+import { Weight, ClipboardList } from 'lucide-react';
+import { Exercises_library } from '@/db/types';
 
-interface ExerciseDetailProps {
-    exercise: Exercise;
-}
-
-const ExerciseDetail: React.FC<ExerciseDetailProps> = ({ exercise }) => {
+const ExerciseDetail: React.FC<{ exercise: Exercises_library }> = ({ exercise }) => {
     return (
         <div className="space-y-6">
             <div>
@@ -15,21 +10,29 @@ const ExerciseDetail: React.FC<ExerciseDetailProps> = ({ exercise }) => {
                 <p className="text-sm text-muted-foreground">{exercise.muscle_group}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                {exercise.sets && <ExerciseInfoItem icon={Repeat} label="Sets" value={exercise.sets} />}
-                {exercise.reps && <ExerciseInfoItem icon={Repeat} label="Reps" value={exercise.reps} />}
-                {exercise.weight && <ExerciseInfoItem icon={Weight} label="Weight" value={`${exercise.weight} kg`} />}
-                {exercise.duration && <ExerciseInfoItem icon={Clock} label="Duration" value={`${exercise.duration} min`} />}
-                {exercise.rest_time && <ExerciseInfoItem icon={RotateCcw} label="Rest" value={`${exercise.rest_time} sec`} />}
-            </div>
+            {exercise.equipment.length > 0 && (
+                <div className="pt-4 border-t">
+                    <h4 className="font-medium flex items-center mb-2">
+                        <Weight className="w-4 h-4 mr-2" />
+                        Equipment Required
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1">
+                        {exercise.equipment.map((equipment, index) => (
+                            <li key={index} className="text-sm text-muted-foreground">
+                                {equipment}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
-            {exercise.notes && (
+            {exercise.instructions && (
                 <div className="pt-4 border-t">
                     <h4 className="font-medium flex items-center mb-2">
                         <ClipboardList className="w-4 h-4 mr-2" />
                         Notes
                     </h4>
-                    <p className="text-sm text-muted-foreground">{exercise.notes}</p>
+                    <p className="text-sm text-muted-foreground">{exercise.instructions}</p>
                 </div>
             )}
         </div>

@@ -1,0 +1,11 @@
+/* Define your CSS class */
+.calendarContainer {
+
+    /* Apply media queries */
+    @media (max-width: 768px) {
+        .fc-toolbar.fc-header-toolbar {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

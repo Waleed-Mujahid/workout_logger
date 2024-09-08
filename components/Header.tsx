@@ -1,15 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { SearchResult } from './SearchBar';
-import { SearchBarClient } from './SearchBarClient';
+import SearchBarParent from './SearchBarParent';
+import Image from 'next/image';
 
-interface HeaderProps {
-  exercises: SearchResult[];
-  error: string | null;
-}
 
-export const Header: React.FC<HeaderProps> = ({ exercises, error }) => (
+export const Header: React.FC = () => (
   <header className="bg-background border-b px-6 py-4 flex items-center justify-between">
     <div className="flex items-center gap-4">
       <Link href="#" className="text-2xl font-bold" prefetch={false}>
@@ -29,9 +25,9 @@ export const Header: React.FC<HeaderProps> = ({ exercises, error }) => (
       </nav>
     </div>
     <div className="flex items-center gap-4">
-      <SearchBarClient initialResults={exercises} initialError={error} />
+      <SearchBarParent />
       <Button variant="ghost" size="icon">
-        <img
+        <Image
           src="/placeholder-user.jpg"
           width={32}
           height={32}
