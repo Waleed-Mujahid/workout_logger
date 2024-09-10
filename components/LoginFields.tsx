@@ -1,11 +1,6 @@
+import Link from 'next/link';
 import { Input } from '@/components/ui/input';
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface LoginFieldsProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +30,12 @@ function LoginFields({ errors }: LoginFieldsProps) {
                 name="password"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <div className="flex justify-between items-center">
+                            <FormLabel>Password</FormLabel>
+                            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:underline">
+                                Forgot Password?
+                            </Link>
+                        </div>
                         <FormControl>
                             <Input
                                 type="password"
@@ -47,6 +47,9 @@ function LoginFields({ errors }: LoginFieldsProps) {
                     </FormItem>
                 )}
             />
+            ``
+
+
         </>
     );
 }

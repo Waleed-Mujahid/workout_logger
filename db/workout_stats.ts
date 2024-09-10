@@ -1,7 +1,9 @@
 'use server';
-import getUserId from "@/hooks/getUserId";
+
 import { WorkoutStats } from "@/lib/schema";
 import { createClient } from "@/utils/supabase/server";
+
+import { getUserId } from "./user";
 
 export const getWorkoutStats = async () => {
     const supabase = createClient();

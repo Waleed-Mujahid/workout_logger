@@ -4,8 +4,11 @@
     /* Apply media queries */
     @media (max-width: 768px) {
         .fc-toolbar.fc-header-toolbar {
-            display: flex;
-            flex-direction: column;
+            font-size: 0.5rem;
+        }
+
+        .fc-view-harness.fc-view-harness-active {
+            font-size: 0.5rem;
         }
     }
 }

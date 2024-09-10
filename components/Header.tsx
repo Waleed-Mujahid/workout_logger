@@ -1,8 +1,9 @@
 import React from 'react';
+
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+
+import { Options } from './Options';
 import SearchBarParent from './SearchBarParent';
-import Image from 'next/image';
 
 
 export const Header: React.FC = () => (
@@ -26,17 +27,7 @@ export const Header: React.FC = () => (
     </div>
     <div className="flex items-center gap-4">
       <SearchBarParent />
-      <Button variant="ghost" size="icon">
-        <Image
-          src="/placeholder-user.jpg"
-          width={32}
-          height={32}
-          alt="User Avatar"
-          className="rounded-full"
-          style={{ aspectRatio: "32/32", objectFit: "cover" }}
-        />
-        <span className="sr-only">User Menu</span>
-      </Button>
+      <Options />
     </div>
   </header>
 );

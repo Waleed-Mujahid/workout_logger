@@ -1,61 +1,92 @@
-import { useState, useRef, useEffect } from 'react';
-import { Goal } from '@/db/types';
-import { updateGoalProgress, deleteGoal } from '@/db/goals';
+import { useEffect, useRef, useState } from 'react';
+
 import { mutate } from 'swr';
 
-export const useGoalHandlers = (goals: Goal[]) => {
-    const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
+import { Goal } from '@/db/types';
+import { toast } from '@/components/ui/use-toast';
+import { deleteGoal, updateGoalProgress } from '@/db/goals';
+
+export const useGoalHandlers = (goal: Goal) => {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [progressInput, setProgressInput] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleEditClick = (goalId: string, currentProgress: number) => {
-        setEditingGoalId(goalId);
+    const handleEditClick = (currentProgress: number) => {
+        setIsEditing(true);
         setProgressInput(currentProgress.toString());
     };
 
-    const updateProgress = (goalId: string, progress: number) => {
-        const currGoal = goals.find(goal => goal.id === goalId);
-        if (!currGoal) {
-            return;
-        }
-        const updatedGoal = { ...currGoal, progress };
-        updateGoalProgress(goalId, updatedGoal);
-    };
-
-    const handleSaveClick = async (goalId: string) => {
+    const handleSaveClick = async () => {
         const newProgress = parseInt(progressInput, 10);
-        setIsLoading(true);
-        if (!isNaN(newProgress)) {
-            updateProgress(goalId, newProgress);
-            await mutate('user_goals');
+        if (isNaN(newProgress)) return;
+
+        const updatedGoal: Goal = {
+            ...goal,
+            progress: newProgress,
+        };
+
+        // Optimistic update
+        mutate('user_goals', (currentData: { goals: Goal[] } | undefined) => {
+            return {
+                goals: currentData?.goals.map((g) =>
+                    g.id === goal.id ? updatedGoal : g
+                ) || [],
+            };
+        }, false);
+
+        try {
+            setIsEditing(false);
+            await updateGoalProgress(goal.id, updatedGoal);
+            await mutate('user_goals'); // Revalidate with server data
+            toast({
+                title: 'Goal progress updated successfully',
+            });
+        } catch (error: any) {
+            toast({
+                title: 'Error updating goal',
+                description: error.message,
+                variant: 'destructive',
+            });
+            mutate('user_goals'); // Rollback in case of error
         }
-        setEditingGoalId(null);
-        setIsLoading(false);
     };
 
-    const handleDeleteClick = async (goalId: string) => {
-        setIsLoading(true);
-        await deleteGoal(goalId);
-        await mutate('user_goals');
-        setIsLoading(false);
+    const handleDeleteClick = async () => {
+        mutate('user_goals', (currentData: { goals: Goal[] } | undefined) => {
+            return {
+                goals: currentData?.goals.filter((g) => g.id !== goal.id) || [],
+            };
+        }, false);
+
+        try {
+            await deleteGoal(goal.id);
+            await mutate('user_goals'); // Revalidate with server data
+            toast({
+                title: 'Goal deleted successfully',
+            });
+        } catch (error: any) {
+            toast({
+                title: 'Error deleting goal',
+                description: error.message,
+                variant: 'destructive',
+            });
+            mutate('user_goals'); // Rollback in case of error
+        }
     };
 
     useEffect(() => {
-        if (editingGoalId !== null) {
+        if (isEditing) {
             inputRef.current?.focus();
         }
-    }, [editingGoalId]);
+    }, [isEditing]);
 
     return {
-        isLoading,
-        setIsLoading,
-        editingGoalId,
+        isEditing,
         progressInput,
         inputRef,
         handleEditClick,
         handleSaveClick,
         handleDeleteClick,
-        setProgressInput
+        setProgressInput,
     };
 };

@@ -1,9 +1,10 @@
 'use server'
-import { Goal } from "./types";
+import { GoalFormData } from "@/lib/schema";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestError } from "@supabase/supabase-js";
-import { GoalFormData } from "@/lib/schema";
-import getUserId from "@/hooks/getUserId";
+
+import { Goal } from "./types";
+import { getUserId } from "./user";
 
 interface GetUserGoalsResponse {
     data: Goal[] | null;
@@ -16,7 +17,8 @@ export const getUserGoals = async (): Promise<GetUserGoalsResponse> => {
     const { data, error } = await supabase
         .from("goals")
         .select("*")
-        .returns<Goal[]>()
+        .order('created_at', { ascending: false })
+        .returns<Goal[]>();
 
     return { data, error };
 };
@@ -24,32 +26,28 @@ export const getUserGoals = async (): Promise<GetUserGoalsResponse> => {
 export async function updateGoalProgress(goal_id: string, goal: Goal) {
     const supabase = createClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("goals")
         .update(goal)
         .match({ id: goal_id });
 
     if (error) {
-        return { error };
+        throw new Error(error.message);
     }
-
-    return { data };
 
 }
 
 export async function deleteGoal(goal_id: string) {
     const supabase = createClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("goals")
         .delete()
         .match({ id: goal_id });
 
     if (error) {
-        return { error };
+        throw new Error(error.message);
     }
-
-    return { data };
 }
 
 export async function saveGoal(goal: GoalFormData) {
@@ -57,14 +55,13 @@ export async function saveGoal(goal: GoalFormData) {
     const supabase = createClient();
     const completion = goal.progress === goal.target;
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("goals")
         .insert([{ ...goal, user_id, completion }]);
 
 
     if (error) {
-        return { error };
+        throw new Error(error.message);
     }
 
-    return { data };
 }

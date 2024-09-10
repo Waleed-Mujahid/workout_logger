@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import RecentWorkoutSession from './RecentWorkoutSession';
-import { WorkoutLog } from './WorkoutLog';
-import WorkoutDetailSkeleton from './WorkoutDetailSkeleton';
+
 import useUserWorkoutSessions from '@/hooks/useUserWorkoutSessions';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { WorkoutLog } from './WorkoutLog';
+import RecentWorkoutSession from './RecentWorkoutSession';
+import WorkoutDetailSkeleton from './WorkoutDetailSkeleton';
 
 export const RecentWorkout: React.FC = () => {
   const { sessions, error, isLoading } = useUserWorkoutSessions();

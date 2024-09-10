@@ -18,14 +18,20 @@ const parseDate = (value: unknown): Date | undefined => {
     return undefined;
   }
 
-  // Check if value is a valid type for the Date constructor
-  if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
-    return new Date(value);
+  // Check if the value is a valid type for the Date constructor
+  if (typeof value === "string" || typeof value === "number" || value instanceof Date) {
+    const parsedDate = new Date(value);
+
+    // Check if the parsed date is valid
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate;
+    }
   }
 
   // Return undefined if the value is not a valid type for Date
   return undefined;
-}
+};
+
 
 // Enum for workout types
 const WorkoutTypeEnum = z.enum(["hiit", "traditional", "cardio", "yoga"]);
@@ -176,6 +182,37 @@ export const goalSchema = z.object({
   path: ["progress"]
 });
 
+export const ChangePasswordSchema = z.object({
+  old_password: z.string(),
+  new_password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/[0-9]/, {
+      message: "Password must contain at least one number",
+    })
+    .regex(/[@$!%*?&#]/, {
+      message:
+        "Password must contain at least one special character (@$!%*?&#)",
+    }),
+  confirm_password: z.string(),
+}).refine((data) => data.new_password === data.confirm_password, {
+  message: "Passwords don't match",
+  path: ["confirm_password"]
+}
+);
+
+export const EditUserSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  height: z.number().int().min(1, { message: "Height is required" }),
+  weight: z.number().int().min(1, { message: "Weight is required" }),
+});
+
+
+export type EditUserFormData = z.infer<typeof EditUserSchema>;
+export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
 export type GoalFormData = z.infer<typeof goalSchema>;
 export type RegisterFormValues = z.infer<typeof RegisterSchema>;
 export type LoginFormValues = z.infer<typeof LoginSchema>;

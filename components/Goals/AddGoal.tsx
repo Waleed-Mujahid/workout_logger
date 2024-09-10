@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
-import { goalSchema, GoalFormData } from '@/lib/schema';
-import { saveGoal } from '@/db/goals';
+
 import { mutate } from 'swr';
+import { useForm } from 'react-hook-form';
+
 import { Goal } from '@/db/types';
+import { saveGoal } from '@/db/goals';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { GoalFormData, goalSchema } from '@/lib/schema';
+
+import { toast } from '../ui/use-toast';
 
 export default function AddGoal() {
     const [isLoading, setIsLoading] = useState(false);
@@ -33,16 +37,19 @@ export default function AddGoal() {
                 };
             }, false);
 
-            const { error } = await saveGoal(data);
-            if (error) {
-                throw new Error(error.message);
-            }
-
+            await saveGoal(data);
             await mutate('user_goals');
-
             reset();
-        } catch (error) {
-            console.error('Error saving goal:', error);
+            toast({
+                title: 'Goal added successfully'
+            });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast({
+                title: 'Error updating user information',
+                description: error.message,
+                variant: 'destructive',
+            });
 
             mutate('user_goals', (currentData: { goals: Goal[] } | undefined) => {
                 return {

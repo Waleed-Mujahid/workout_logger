@@ -1,62 +1,9 @@
 'use server'
-import getUserId from "@/hooks/getUserId";
-import { WorkoutSession as WorkoutSessionSchema } from "@/lib/schema";
-import { WorkoutSession, Exercise } from '@/db/types';
+import { Exercise, WorkoutSession } from '@/db/types';
 import { createClient } from "@/utils/supabase/server";
+import { WorkoutSession as WorkoutSessionSchema } from "@/lib/schema";
 
-const getMostRecentWorkoutSession = async (): Promise<{ session: WorkoutSession | null; exercises: Exercise[] | null; error: boolean }> => {
-    const supabase = createClient();
-    const userId = await getUserId();
-
-    const { data, error } = await supabase
-        .from("workout_sessions")
-        .select(`
-            id,
-            date,
-            workout_type,
-            total_duration,
-            calories_burned,
-            notes,
-            workout_exercises (
-                exercise_id,
-                user_exercises (
-                    name,
-                    muscle_group,
-                    sets,
-                    reps,
-                    weight,
-                    duration,
-                    rest_time,
-                    notes
-                )
-            )
-        `)
-        .eq("user_id", userId)
-        .order("date", { ascending: false })
-        .limit(1);
-
-
-    if (error || !data || data.length === 0) {
-        return { session: null, exercises: null, error: true };
-    }
-
-    const sessionData = data[0];
-
-    const exercises = sessionData.workout_exercises.map((workoutExercise: any) => workoutExercise.user_exercises);
-    return {
-        session: {
-            id: sessionData.id,
-            date: new Date(sessionData.date),
-            workout_type: sessionData.workout_type,
-            total_duration: sessionData.total_duration,
-            calories_burned: sessionData.calories_burned,
-            notes: sessionData.notes,
-            user_id: userId,
-        } as WorkoutSession,
-        exercises: exercises as Exercise[],
-        error: false,
-    };
-};
+import { getUserId } from "./user";
 
 export const getUserWorkoutSessions = async (): Promise<{ sessions: WorkoutSession[] | null; error: boolean }> => {
     const supabase = createClient();
@@ -108,21 +55,6 @@ export const getUserWorkoutSessions = async (): Promise<{ sessions: WorkoutSessi
 
     return { sessions, error: false };
 };
-
-export const fetchMostRecentWorkoutSession = async () => {
-    try {
-        const { session, exercises, error } = await getMostRecentWorkoutSession();
-        if (error) {
-            throw new Error('Error fetching workout session');
-        }
-        return { session, exercises };
-    } catch (err) {
-        console.error('Failed to fetch workout session:', err);
-        throw err;
-    }
-};
-
-
 
 export async function saveWorkoutData(data: WorkoutSessionSchema) {
     const { date, workout, total_duration, calories_burned, notes } = data;

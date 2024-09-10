@@ -41,3 +41,28 @@ export interface Exercise {
     rest_time?: number;
     notes?: string;
 }
+
+export interface CalendarEvent {
+    id: string;
+    title: string;
+    data: WorkoutSession;
+    start: Date;
+    end: Date;
+    color: string;
+    backgroundColor: string;
+    borderColor: string;
+    textColor: string;
+    exercises: Exercise[];
+    editable: boolean;
+    startEditable: boolean;
+    durationEditable: boolean;
+    resourceEditable: boolean;
+    overlap: boolean;
+    allDay: boolean;
+}
+
+export interface User {
+    name: string;
+    height: number;
+    weight: number;
+}

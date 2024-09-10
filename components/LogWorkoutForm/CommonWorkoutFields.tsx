@@ -1,10 +1,11 @@
-// CommonWorkoutFields.tsx
 import React from "react";
+
 import { Control } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { WorkoutSession } from "@/lib/schema";
+import { Textarea } from "@/components/ui/textarea";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface CommonWorkoutFieldsProps {
     control: Control<WorkoutSession>;
@@ -59,20 +60,22 @@ const CommonWorkoutFields: React.FC<CommonWorkoutFieldsProps> = ({ control }) =>
                     <FormItem>
                         <FormControl>
                             <Input
-                                type="date"
-                                placeholder="Data de nascimento"
+                                type="datetime-local"
+                                placeholder="Select date and time"
                                 {...field}
                                 value={
                                     field.value instanceof Date
-                                        ? field.value.toISOString().split('T')[0]
+                                        ? new Date(field.value).toISOString().slice(0, 16) // Format to 'YYYY-MM-DDTHH:MM'
                                         : field.value
                                 }
+                                onChange={(e) => field.onChange(e.target.value)}
                             />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}
             />
+
         </>
     );
 };
