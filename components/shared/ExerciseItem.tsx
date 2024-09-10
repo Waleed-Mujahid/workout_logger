@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Exercise } from '@/lib/schema';
+import { Exercise } from '@/db/types';
 
 interface ExerciseItemProps {
     exercise: Exercise;
@@ -8,7 +8,7 @@ interface ExerciseItemProps {
 
 const ExerciseItem: React.FC<ExerciseItemProps> = ({ exercise }) => {
     return (
-        <li className="bg-gray-50 p-4 rounded-lg shadow-md border border-gray-200">
+        <li key={exercise.id} className="bg-gray-50 p-4 rounded-lg shadow-md border border-gray-200">
             <div className="font-semibold text-lg mb-2">
                 {exercise.name} <span className="text-gray-500">({exercise.muscle_group})</span>
             </div>

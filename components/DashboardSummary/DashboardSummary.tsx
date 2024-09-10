@@ -32,7 +32,7 @@ const DashboardSummary = () => {
   };
 
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3" id="Dashboard">
+    <Card className="mt-16 col-span-1 md:col-span-2 lg:col-span-3" id="Dashboard">
       <CardHeader>
         <CardTitle>Dashboard</CardTitle>
         <CardDescription>Your workout summary and progress at a glance.</CardDescription>

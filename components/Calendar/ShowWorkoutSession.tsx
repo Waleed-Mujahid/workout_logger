@@ -44,7 +44,7 @@ const ShowWorkoutSession: React.FC<ShowWorkoutSessionProps> = ({ event_id }) => 
                 )}
             </div>
             <div>
-                <h3 className="text-xl font-semibold mb-4">Exercises</h3>
+                <h3 className="text-xl font-semibold mt-4 mb-1">Exercises</h3>
                 {session.exercises.length > 0 ? (
                     <ul className="space-y-4">
                         {session.exercises.map((exercise) => (

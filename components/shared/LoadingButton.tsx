@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button, ButtonProps } from "../ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 
 type LoadingButtonProps = ButtonProps & {
     loading: boolean;
@@ -15,7 +15,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({ loading, onClick, childre
                 className
             )}
             disabled={loading || disabled}
-            {...props} 
+            {...props}
         >
             {loading ? 'Pending...' : children}
         </Button>

@@ -11,8 +11,8 @@ import LoadingButton from "@/components/shared/LoadingButton"
 import { EditUserFormData, EditUserSchema } from '@/lib/schema';
 import { DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-import { Button } from '../ui/button';
-import { toast } from '../ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 import LoadingDialog from './LoadingDialog';
 
 interface EditUserProps {
@@ -64,7 +64,6 @@ const EditProfile = ({ userData, closeDialog }: EditUserProps) => {
     if (!userData) {
         return <LoadingDialog />
     }
-    console.log(userData)
 
     return (
         <>

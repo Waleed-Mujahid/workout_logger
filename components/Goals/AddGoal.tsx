@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GoalFormData, goalSchema } from '@/lib/schema';
 
-import { toast } from '../ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 export default function AddGoal() {
     const [isLoading, setIsLoading] = useState(false);

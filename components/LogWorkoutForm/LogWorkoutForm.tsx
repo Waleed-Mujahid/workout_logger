@@ -1,20 +1,23 @@
 'use client'
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { WorkoutSession, WorkoutSessionSchema } from "@/lib/schema";
-import { saveWorkoutData } from "@/db/workout_sessions";
-import WorkoutTypeSelector from "./WorkoutTypeSelector";
-import HIITWorkoutForm from "./HIITWorkoutForm";
-import TraditionalWorkoutForm from "./TraditionalWorkoutForm";
-import CardioWorkoutForm from "./CardioWorkoutForm";
-import YogaWorkoutForm from "./YogaWorkoutForm";
-import CommonWorkoutFields from "./CommonWorkoutFields";
+
 import { mutate } from "swr";
-import LoadingButton from "../shared/LoadingButton";
+import { useForm } from "react-hook-form";
+
+import { Form } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { saveWorkoutData } from "@/db/workout_sessions";
+import LoadingButton from "@/components/shared/LoadingButton";
+import { WorkoutSession, WorkoutSessionSchema } from "@/lib/schema";
 import useUserWorkoutSessions from "@/hooks/useUserWorkoutSessions";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+import HIITWorkoutForm from "./HIITWorkoutForm";
+import YogaWorkoutForm from "./YogaWorkoutForm";
+import CardioWorkoutForm from "./CardioWorkoutForm";
+import WorkoutTypeSelector from "./WorkoutTypeSelector";
+import CommonWorkoutFields from "./CommonWorkoutFields";
+import TraditionalWorkoutForm from "./TraditionalWorkoutForm";
 
 export const LogWorkoutForm: React.FC = () => {
     const [workoutType, setWorkoutType] = useState<string>("");
@@ -36,6 +39,7 @@ export const LogWorkoutForm: React.FC = () => {
                 sessionMutate(),
             ]);
             form.reset();
+            setWorkoutType("");
             const dashboard = document.getElementById("Dashboard");
             dashboard?.scrollIntoView({ behavior: "smooth" });
         } catch (err) {

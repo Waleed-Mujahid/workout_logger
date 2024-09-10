@@ -26,7 +26,7 @@ const ProfilePopover = ({
 
     return (
         <Popover>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
                 <Button variant="ghost" className="p-2">
                     <User className="text-primary w-5 h-5" />
                 </Button>

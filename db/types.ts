@@ -31,7 +31,7 @@ export interface Goal {
 }
 
 export interface Exercise {
-    id: string; // UUID
+    id: string;
     name: string;
     muscle_group: MuscleGroup;
     weight?: number;

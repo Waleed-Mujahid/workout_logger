@@ -7,7 +7,7 @@ import SearchBarParent from './SearchBarParent';
 
 
 export const Header: React.FC = () => (
-  <header className="bg-background border-b px-6 py-4 flex items-center justify-between">
+  <header className="fixed bg-background border-b px-6 py-4 flex items-center justify-between z-50 w-full h-16">
     <div className="flex items-center gap-4">
       <Link href="#" className="text-2xl font-bold" prefetch={false}>
         Workout Tracker

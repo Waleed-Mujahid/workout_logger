@@ -21,6 +21,7 @@ export const getUserWorkoutSessions = async (): Promise<{ sessions: WorkoutSessi
             workout_exercises (
                 exercise_id,
                 user_exercises (
+                    id,
                     name,
                     muscle_group,
                     sets,

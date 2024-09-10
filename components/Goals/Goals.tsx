@@ -28,7 +28,7 @@ const Goals: React.FC = () => {
     const goals = data?.goals || [];
 
     return (
-        <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+        <Card className="col-span-1 md:col-span-2 lg:col-span-3" id="Goals">
             <CardHeader>
                 <CardTitle>Goals</CardTitle>
                 <CardDescription>Track your fitness goals and progress.</CardDescription>
