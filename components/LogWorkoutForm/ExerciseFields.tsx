@@ -1,16 +1,13 @@
-'use client'
+'use client';
 
 import React, { useEffect, useRef, useState } from "react";
-
 import { Control } from "react-hook-form";
-
 import { Input } from "@/components/ui/input";
 import { AutoComplete } from "@/components/ui/autocomplete";
 import useExerciseLibrary from "@/hooks/useExerciseLibrary";
 import { MuscleGroupEnum, WorkoutSession } from "@/lib/schema";
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
-
 import { Button } from "../ui/button";
 
 interface ExerciseFieldsProps {
@@ -29,7 +26,6 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
     const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>("");
 
     const { exercises, loading } = useExerciseLibrary();
-
     const inputRef = useRef<HTMLInputElement>(null);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
 
@@ -63,15 +59,15 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
 
     return (
         <div className="grid grid-cols-2 gap-4">
-            {/* Conditional AutoComplete or Custom Input */}
+            {/* Exercise Name or AutoComplete */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.name`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Exercise Name</FormLabel>
                         <FormControl>
                             {filteredOptions.length === 0 && !loading ? (
-                                // If no search results, render a simple Input for custom name
                                 <Input
                                     {...field}
                                     ref={inputRef}
@@ -84,7 +80,6 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                                     }}
                                 />
                             ) : (
-                                // If there are search results, show AutoComplete
                                 <AutoComplete
                                     selectedValue={selectedValue}
                                     onSelectedValueChange={(value) => {
@@ -93,9 +88,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                                         handleExerciseSelection(value); // Automatically select muscle group
                                     }}
                                     searchValue={searchValue}
-                                    onSearchValueChange={(value) => {
-                                        setSearchValue(value);
-                                    }}
+                                    onSearchValueChange={(value) => setSearchValue(value)}
                                     items={filteredOptions}
                                     isLoading={loading}
                                     emptyMessage="No items found."
@@ -108,12 +101,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Muscle Group */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.muscle_group`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Muscle Group</FormLabel>
                         <FormControl>
                             <Select
                                 value={selectedMuscleGroup || field.value} // Set muscle group based on selection
@@ -138,11 +133,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
+            {/* Sets */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.sets`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Sets</FormLabel>
                         <FormControl>
                             <Input type="number" {...field} placeholder="Sets" />
                         </FormControl>
@@ -150,12 +148,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Reps */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.reps`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Reps</FormLabel>
                         <FormControl>
                             <Input type="number" {...field} placeholder="Reps" />
                         </FormControl>
@@ -163,12 +163,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Weight */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.weight`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Weight (kg)</FormLabel>
                         <FormControl>
                             <Input type="number" {...field} placeholder="Weight (kg)" />
                         </FormControl>
@@ -176,12 +178,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Duration */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.duration`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Duration (min)</FormLabel>
                         <FormControl>
                             <Input type="number" {...field} placeholder="Duration (min)" />
                         </FormControl>
@@ -189,12 +193,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Rest Time */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.rest_time`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Rest Time (s)</FormLabel>
                         <FormControl>
                             <Input type="number" {...field} placeholder="Rest Time (s)" />
                         </FormControl>
@@ -202,12 +208,14 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Notes */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.notes`}
                 render={({ field }) => (
                     <FormItem>
+                        <FormLabel>Notes</FormLabel>
                         <FormControl>
                             <Input {...field} placeholder="Notes" />
                         </FormControl>
@@ -215,6 +223,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                     </FormItem>
                 )}
             />
+
             {/* Remove Button */}
             <Button variant="destructive" onClick={remove}>
                 Remove

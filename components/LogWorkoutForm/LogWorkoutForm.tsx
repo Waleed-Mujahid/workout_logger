@@ -13,7 +13,7 @@ import LoadingButton from "@/components/shared/LoadingButton";
 import useUserWorkoutSessions from "@/hooks/useUserWorkoutSessions";
 import { saveExercises, saveWorkoutSession } from "@/db/workout_sessions";
 import { WorkoutSession as DbWorkoutSession, Exercise } from '@/db/types';
-import { WorkoutSession, WorkoutSessionSchema, WorkoutStats } from "@/lib/schema";
+import { WorkoutSession, WorkoutSessionSchema } from "@/lib/schema";
 import { optimisticUpdateSession, prepareNewSession, updateStats } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
