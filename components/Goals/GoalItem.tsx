@@ -20,6 +20,7 @@ const GoalItem: React.FC<GoalItemProps> = ({ goal }) => {
         handleSaveClick,
         handleDeleteClick,
         setProgressInput,
+        handleChange,
     } = useGoalHandlers(goal);
 
     const progressPercentage = Math.min((goal.progress / goal.target) * 100, 100);
@@ -54,7 +55,7 @@ const GoalItem: React.FC<GoalItemProps> = ({ goal }) => {
                         <Input
                             type="number"
                             value={progressInput}
-                            onChange={(e) => setProgressInput(e.target.value)}
+                            onChange={handleChange}
                             ref={inputRef}
                             className="w-20"
                         />

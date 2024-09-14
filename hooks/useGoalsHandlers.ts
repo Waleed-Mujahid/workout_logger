@@ -74,6 +74,15 @@ export const useGoalHandlers = (goal: Goal) => {
         }
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+
+        // Allow empty input
+        if (value === '' || /^\d+$/.test(value)) {
+            setProgressInput(value);
+        }
+    };
+
     useEffect(() => {
         if (isEditing) {
             inputRef.current?.focus();
@@ -88,5 +97,6 @@ export const useGoalHandlers = (goal: Goal) => {
         handleSaveClick,
         handleDeleteClick,
         setProgressInput,
+        handleChange,
     };
 };

@@ -1,11 +1,17 @@
-// ExerciseFields.tsx
-import React from "react";
+'use client'
+
+import React, { useEffect, useRef, useState } from "react";
+
 import { Control } from "react-hook-form";
-import { FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { WorkoutSession, MuscleGroupEnum } from "@/lib/schema";
+import { AutoComplete } from "@/components/ui/autocomplete";
+import useExerciseLibrary from "@/hooks/useExerciseLibrary";
+import { MuscleGroupEnum, WorkoutSession } from "@/lib/schema";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+
+import { Button } from "../ui/button";
 
 interface ExerciseFieldsProps {
     control: Control<WorkoutSession>;
@@ -13,33 +19,114 @@ interface ExerciseFieldsProps {
     remove: () => void;
 }
 
-const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove }) => {
+const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
+    control,
+    index,
+    remove,
+}) => {
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [selectedValue, setSelectedValue] = useState<string>("");
+    const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>("");
+
+    const { exercises, loading } = useExerciseLibrary();
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    const autoCompleteRef = useRef<HTMLInputElement>(null);
+
+    const exerciseOptions = exercises.map((exercise) => ({
+        value: exercise.name,
+        label: exercise.name,
+        muscleGroup: exercise.muscle_group,
+    }));
+
+    const filteredOptions = exerciseOptions.filter((option) =>
+        option.label.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    useEffect(() => {
+        if (filteredOptions.length === 0 && !loading) {
+            inputRef.current?.focus();
+        } else {
+            autoCompleteRef.current?.focus();
+        }
+    }, [filteredOptions.length, loading]);
+
+    const handleExerciseSelection = (selectedExercise: string) => {
+        const matchedExercise = exerciseOptions.find(
+            (exercise) => exercise.value === selectedExercise
+        );
+
+        if (matchedExercise) {
+            setSelectedMuscleGroup(matchedExercise.muscleGroup); // Automatically set the muscle group
+        }
+    };
+
     return (
         <div className="grid grid-cols-2 gap-4">
+            {/* Conditional AutoComplete or Custom Input */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.name`}
                 render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <Input {...field} placeholder="Exercise name" />
+                            {filteredOptions.length === 0 && !loading ? (
+                                // If no search results, render a simple Input for custom name
+                                <Input
+                                    {...field}
+                                    ref={inputRef}
+                                    placeholder="Enter custom exercise name"
+                                    value={searchValue}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        field.onChange(value); // Update form value
+                                        setSearchValue(value); // Keep track of input
+                                    }}
+                                />
+                            ) : (
+                                // If there are search results, show AutoComplete
+                                <AutoComplete
+                                    selectedValue={selectedValue}
+                                    onSelectedValueChange={(value) => {
+                                        setSelectedValue(value);
+                                        field.onChange(value); // Update form value
+                                        handleExerciseSelection(value); // Automatically select muscle group
+                                    }}
+                                    searchValue={searchValue}
+                                    onSearchValueChange={(value) => {
+                                        setSearchValue(value);
+                                    }}
+                                    items={filteredOptions}
+                                    isLoading={loading}
+                                    emptyMessage="No items found."
+                                    placeholder="Search or enter custom exercise..."
+                                    ref={autoCompleteRef}
+                                />
+                            )}
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}
             />
+            {/* Muscle Group */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.muscle_group`}
                 render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
+                            <Select
+                                value={selectedMuscleGroup || field.value} // Set muscle group based on selection
+                                onValueChange={(value) => {
+                                    setSelectedMuscleGroup(value);
+                                    field.onChange(value); // Update form value
+                                }}
+                            >
                                 <SelectTrigger>
-                                    <span>{field.value || 'Select muscle group'}</span>
+                                    <span>{selectedMuscleGroup || field.value || "Select muscle group"}</span>
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {MuscleGroupEnum.options.map(option => (
+                                    {MuscleGroupEnum.options.map((option) => (
                                         <SelectItem key={option} value={option}>
                                             {option}
                                         </SelectItem>
@@ -63,6 +150,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Reps */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.reps`}
@@ -75,6 +163,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Weight */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.weight`}
@@ -87,6 +176,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Duration */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.duration`}
@@ -99,6 +189,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Rest Time */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.rest_time`}
@@ -111,6 +202,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Notes */}
             <FormField
                 control={control}
                 name={`workout.exercises.${index}.notes`}
@@ -123,6 +215,7 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({ control, index, remove 
                     </FormItem>
                 )}
             />
+            {/* Remove Button */}
             <Button variant="destructive" onClick={remove}>
                 Remove
             </Button>

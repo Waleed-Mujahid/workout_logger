@@ -1,8 +1,10 @@
-// TraditionalWorkoutForm.tsx
 import React from "react";
+
 import { Control, useFieldArray } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+
 import { WorkoutSession } from "@/lib/schema";
+import { Button } from "@/components/ui/button";
+
 import ExerciseFields from "./ExerciseFields";
 
 interface TraditionalWorkoutFormProps {
@@ -19,11 +21,18 @@ const TraditionalWorkoutForm: React.FC<TraditionalWorkoutFormProps> = ({ control
         <div className="space-y-4">
             <Button
                 type="button"
-                onClick={() => append({
-                    name: "",
-                    muscle_group: "biceps",
-                    notes: "",
-                })}
+                onClick={() =>
+                    append({
+                        name: "", // default value for the name
+                        muscle_group: "biceps", // default value for muscle group
+                        notes: "", // default value for notes
+                        sets: 0,
+                        reps: 0,
+                        weight: 0,
+                        duration: 0,
+                        rest_time: 0,
+                    })
+                }
             >
                 Add Exercise
             </Button>

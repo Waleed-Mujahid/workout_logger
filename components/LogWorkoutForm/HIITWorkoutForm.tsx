@@ -1,12 +1,11 @@
-// HIITWorkoutForm.tsx
-import React from "react";
 import { Control, useFieldArray } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { WorkoutSession } from "@/lib/schema";
-import ExerciseFields from "./ExerciseFields";
 
+import { Input } from "@/components/ui/input";
+import { WorkoutSession } from "@/lib/schema";
+import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+import ExerciseFields from "./ExerciseFields";
 interface HIITWorkoutFormProps {
     control: Control<WorkoutSession>;
 }
@@ -22,21 +21,28 @@ const HIITWorkoutForm: React.FC<HIITWorkoutFormProps> = ({ control }) => {
             <Button
                 type="button"
                 onClick={() => append({
-                    name: "",
-                    muscle_group: "biceps",
-                    notes: "",
+                    name: "", // default value for the name
+                    muscle_group: "biceps", // default value for muscle group
+                    notes: "", // default value for notes
+                    sets: 0,
+                    reps: 0,
+                    weight: 0,
+                    duration: 0,
+                    rest_time: 0,
                 })}
             >
                 Add Exercise
             </Button>
-            {fields.map((field, index) => (
-                <ExerciseFields
-                    key={field.id}
-                    control={control}
-                    index={index}
-                    remove={() => remove(index)}
-                />
-            ))}
+            {
+                fields.map((field, index) => (
+                    <ExerciseFields
+                        key={field.id}
+                        control={control}
+                        index={index}
+                        remove={() => remove(index)}
+                    />
+                ))
+            }
             <FormField
                 control={control}
                 name="workout.rounds"
@@ -63,7 +69,7 @@ const HIITWorkoutForm: React.FC<HIITWorkoutFormProps> = ({ control }) => {
                     </FormItem>
                 )}
             />
-        </div>
+        </div >
     );
 };
 

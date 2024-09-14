@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerTrigger } from '@/components/ui/drawer';
-import ExerciseDetail from './ExerciseDetail';
-import { Exercises_library } from '@/db/types';
+'use client'
 
+import React, { useEffect, useState } from 'react';
+
+import { Exercises_library } from '@/db/types';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+
+import ExerciseDetail from './ExerciseDetail';
 interface ResponsiveDetailWrapperProps {
     exercise: Exercises_library;
 }

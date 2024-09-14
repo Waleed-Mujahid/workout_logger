@@ -1,15 +1,17 @@
-'use client'
+'use client';
+
+import { createContext } from 'react';
+
+import useSWR, { KeyedMutator } from 'swr';
 
 import { WorkoutSession } from '@/db/types';
 import { getUserWorkoutSessions } from '@/db/workout_sessions';
-import { createContext, useContext } from 'react';
-import useSWR, { KeyedMutator } from 'swr';
 
 interface WorkoutSessionsContextType {
     sessions: WorkoutSession[] | null | undefined;
     error: boolean;
     isLoading: boolean;
-    mutate: KeyedMutator<WorkoutSession[] | null>; 
+    mutate: KeyedMutator<WorkoutSession[] | null>;
 }
 
 // Create context
@@ -23,7 +25,6 @@ const fetcher = async (): Promise<WorkoutSession[] | null> => {
     }
     return sessions;
 };
-
 
 // Provider component
 export const WorkoutSessionsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -8,7 +8,13 @@ export const WorkoutLog = ({ exercises }: { exercises: Exercise[] }) => (
 		) : (
 			<ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{exercises.map((exercise) => (
-					<ExerciseItem key={exercise.id} exercise={exercise} />
+					<ExerciseItem
+						key={exercise.id}
+						exercise={exercise}
+						onDelete={() => { }}
+						onEdit={() => { }}
+						showOptions={false}
+					/>
 				))}
 			</ul>
 		)}

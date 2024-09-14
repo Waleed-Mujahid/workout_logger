@@ -6,18 +6,21 @@ import { LogWorkoutForm } from '@/components/LogWorkoutForm';
 import { DashboardSummary } from '@/components/DashboardSummary';
 import ExerciseLibrary from '@/components/ExerciseLibrary/ExerciseLibrary';
 import { WorkoutSessionsProvider } from '@/context/WorkoutSessionsContext';
+import { ExerciseLibraryProvider } from '@/context/ExerciseLibraryContext';
 
 export default function Home() {
 
 
   return (
     <WorkoutSessionsProvider>
-      <Header />
+    <Header />
       <DashboardSummary />
       <RecentWorkout />
-      <ExerciseLibrary />
-      <LogWorkoutForm />
-      <Calendar />
+      <ExerciseLibraryProvider>
+        <ExerciseLibrary />
+        <LogWorkoutForm />
+        <Calendar />
+      </ExerciseLibraryProvider>
       <Goals />
     </WorkoutSessionsProvider>
   );

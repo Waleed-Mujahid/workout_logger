@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 
 import useUserWorkoutSessions from '@/hooks/useUserWorkoutSessions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +18,7 @@ export const RecentWorkout: React.FC = () => {
           <CardDescription>Your most recent workout details.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-red-500">Error fetching workout data. Please try again later.</div>
+          <div className="text-red-500">Workout data not found.</div>
         </CardContent>
       </Card>
     );

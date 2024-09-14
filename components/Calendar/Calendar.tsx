@@ -1,10 +1,11 @@
 'use client'
+
 import FullCalendar from '@fullcalendar/react'
 import useEventData from '@/hooks/useEventData'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 
-import ShowWorkoutSession from './ShowWorkoutSession'
+import { ShowWorkoutSession } from './ShowWorkoutSession'
 
 function Calendar() {
     const { events } = useEventData()
