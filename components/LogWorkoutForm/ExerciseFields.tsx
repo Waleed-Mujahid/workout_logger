@@ -170,9 +170,9 @@ const ExerciseFields: React.FC<ExerciseFieldsProps> = ({
                 name={`workout.exercises.${index}.weight`}
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Weight (kg)</FormLabel>
+                        <FormLabel>Weight (Lbs)</FormLabel>
                         <FormControl>
-                            <Input type="number" {...field} placeholder="Weight (kg)" />
+                            <Input type="number" {...field} placeholder="Weight (Lbs)" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>

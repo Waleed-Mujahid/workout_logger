@@ -143,3 +143,11 @@ export const optimisticUpdateSession = async (
     return [newSession, ...sessions];
   }, false);
 };
+
+export const calculateHeightInInches = (feet: string, inches: string): number => {
+  const feetToInches = parseInt(feet || '0') * 12;
+  const inchValue = parseInt(inches || '0');
+  const totalInches = feetToInches + inchValue;
+
+  return isNaN(totalInches) ? 0 : totalInches;
+};

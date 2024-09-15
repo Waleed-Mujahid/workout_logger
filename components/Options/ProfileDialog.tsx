@@ -27,15 +27,15 @@ const ProfileDialog: React.FC<ProfileDialogProps> = ({
         setMounted(true); // Prevent rendering on the server
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getUserData();
-            if (data) {
-                setUserData(data);
-            }
-        };
+    const fetchUserData = async () => {
+        const data = await getUserData();
+        if (data) {
+            setUserData(data);
+        }
+    };
 
-        fetchData();
+    useEffect(() => {
+        fetchUserData();
     }, []);
 
     // Prevent the Dialog from rendering on the server
@@ -50,7 +50,11 @@ const ProfileDialog: React.FC<ProfileDialogProps> = ({
                         <TabsTrigger value="password">Change Password</TabsTrigger>
                     </TabsList>
                     <TabsContent value="edit">
-                        <EditProfile userData={userData} closeDialog={closeDialog} />
+                        <EditProfile
+                            userData={userData}
+                            closeDialog={closeDialog}
+                            refetchUserData={fetchUserData}  // Pass refetch function to EditProfile
+                        />
                     </TabsContent>
                     <TabsContent value="password">
                         <ChangePassword closeDialog={closeDialog} />

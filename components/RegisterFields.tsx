@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import {
     FormControl,
@@ -6,8 +8,20 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
+import { calculateHeightInInches } from '@/lib/utils';
 
 function RegisterFields() {
+    const [feet, setFeet] = useState('');
+    const [inches, setInches] = useState('');
+
+    const { setValue } = useFormContext();
+
+    // Update height value when feet or inches change
+    useEffect(() => {
+        const totalHeightInInches = calculateHeightInInches(feet, inches);
+        setValue('height', totalHeightInInches);  // Explicitly set the height in form state
+    }, [feet, inches, setValue]);
+
     return (
         <>
             <FormField
@@ -57,20 +71,43 @@ function RegisterFields() {
                 render={({ field, fieldState }) => (
                     <FormItem className="block md:flex items-center space-x-4">
                         <FormLabel className="w-1/4 md:pt-3 text-right">
-                            Height (cm)
+                            Height
                         </FormLabel>
                         <div className="flex-1">
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    placeholder="Enter your height in cm"
-                                    {...field}
-                                />
-                            </FormControl>
+                            <div className="flex space-x-4">
+                                <div>
+                                    <FormLabel className="mb-2">Feet</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="Feet"
+                                            value={feet}
+                                            onChange={(e) =>
+                                                setFeet(e.target.value)
+                                            }
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div>
+                                    <FormLabel className="mb-2">Inches</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="Inches"
+                                            value={inches}
+                                            onChange={(e) =>
+                                                setInches(e.target.value)
+                                            }
+                                        />
+                                    </FormControl>
+                                </div>
+                            </div>
                             <FormMessage>
                                 {fieldState.error?.message}
                             </FormMessage>
                         </div>
+                        {/* Hidden input to store calculated height */}
+                        <input type="hidden" {...field} />
                     </FormItem>
                 )}
             />
@@ -79,13 +116,13 @@ function RegisterFields() {
                 render={({ field, fieldState }) => (
                     <FormItem className="block md:flex items-center space-x-4">
                         <FormLabel className="w-1/4 md:pt-3 text-right">
-                            Weight (kg)
+                            Weight (Lbs)
                         </FormLabel>
                         <div className="flex-1">
                             <FormControl>
                                 <Input
                                     type="number"
-                                    placeholder="Enter your weight in kg"
+                                    placeholder="Enter your weight in pounds"
                                     {...field}
                                 />
                             </FormControl>

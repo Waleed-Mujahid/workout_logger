@@ -175,7 +175,7 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({ exercise, onDelete, onEdit,
                     <div className="text-sm text-gray-600">
                         {exercise.sets && exercise.reps && exercise.weight && (
                             <span className="font-medium">
-                                {exercise.sets}x{exercise.reps} @ {exercise.weight}kg
+                                {exercise.sets}x{exercise.reps} @ {exercise.weight}Lbs
                             </span>
                         )}
                         {exercise.duration && (

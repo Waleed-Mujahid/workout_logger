@@ -116,8 +116,8 @@ const UserProfileSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   email: z.string().email(),
-  height: z.preprocess(parseNumber, z.number().min(1).optional()), // in cm
-  weight: z.preprocess(parseNumber, z.number().min(1).optional()), // in kg
+  height: z.preprocess(parseNumber, z.number().min(1).optional()), // in inches
+  weight: z.preprocess(parseNumber, z.number().min(1).optional()), // in Lbs
   goals: z.array(z.string()),
 });
 
@@ -126,7 +126,7 @@ const WorkoutStatsSchema = z.object({
   total_workouts: z.preprocess(parseNumber, z.number().min(1)),
   total_time_spent: z.preprocess(parseNumber, z.number().min(1)), // in hours
   total_calories_burned: z.preprocess(parseNumber, z.number().min(1)),
-  total_weight_lifted: z.preprocess(parseNumber, z.number().min(1).optional()), // in kg or lbs
+  total_weight_lifted: z.preprocess(parseNumber, z.number().min(1).optional()), // lbs
 });
 
 // Main app data model
@@ -205,8 +205,8 @@ export const ChangePasswordSchema = z.object({
 
 export const EditUserSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  height: z.number().int().min(1, { message: "Height is required" }),
-  weight: z.number().int().min(1, { message: "Weight is required" }),
+  height: z.preprocess(parseNumber, z.number().int().min(1, { message: "Height must be at least 1" })),
+  weight: z.preprocess(parseNumber, z.number().int().min(1, { message: "Weight must be at least 1" })),
 });
 
 

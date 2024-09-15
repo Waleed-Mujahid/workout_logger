@@ -10,21 +10,14 @@ import { signUp } from '@/db/auth';
 function Register({
     searchParams,
 }: {
-    searchParams: { message: string };
+    searchParams?: { [key: string]: string | string[] | undefined };
 }) {
 
-    const error = searchParams.message;
+    const errorMessage = searchParams?.error ? "An error occurred" : null
+    const limitError = searchParams?.limit ? "Free emails limit reached. Use an SMTP provider for Supabase" : null
 
     const form = useForm<RegisterFormValues>({
-        resolver: zodResolver(RegisterSchema),
-        defaultValues: {
-            email: 'muhammadwaleed4943@gmail.com',
-            name: 'waleed',
-            password: 'Password@123',
-            confirm_password: 'Password@123',
-            height: 172,
-            weight: 66,
-        },
+        resolver: zodResolver(RegisterSchema)
     });
 
     async function onSubmit(data: RegisterFormValues) {
@@ -40,7 +33,9 @@ function Register({
                     className="flex flex-col p-4 space-y-2"
                 >
                     <RegisterFields />
-                    {error && <span className="text-destructive text-md self-center">{error}</span>} <br />
+                    {errorMessage && <span className="text-destructive text-md self-center">{errorMessage}</span>}
+                    {limitError && (<div className="text-destructive text-md self-center">{limitError}</div>)}
+                    <br />
                     <FormButton buttonText="Register" />
                 </form>
             </Form>

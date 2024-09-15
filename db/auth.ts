@@ -40,8 +40,15 @@ export const signUp = async (formData: RegisterFormValues) => {
         },
     });
 
+
     if (error) {
-        return redirect("/login?message=Could not create user");
+        if (error.code === "over_email_send_rate_limit") {
+
+            redirect('/register?limit=true')
+        }
+        else {
+            redirect('/register?error=true')
+        }
     }
 
     return redirect("/login?message=Check email to continue sign in process");
