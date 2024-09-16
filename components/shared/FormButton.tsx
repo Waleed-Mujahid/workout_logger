@@ -4,26 +4,25 @@ import Link from 'next/link';
 
 function FormButton({
     buttonText,
+    formType,
 }: {
     buttonText: string;
+    formType: 'login' | 'register';
 }) {
     return (
         <>
-            <Button
-                type="submit"
-                className="w-full lg:w-1/2 py-2 px-4 mx-auto"
-            >
+            <Button type="submit" className="w-full lg:w-1/2 py-2 px-4 mx-auto">
                 {buttonText}
             </Button>
             <FormDescription className="text-center text-xs text-muted-foreground">
-                {buttonText === 'Login'
+                {formType === 'login'
                     ? 'Don’t have an account?'
                     : 'Already have an account?'}{' '}
                 <Link
-                    href={buttonText === 'Login' ? '/register' : '/login'}
-                    className="text-destructive  hover:underline"
+                    href={formType === 'login' ? '/register' : '/login'}
+                    className="text-destructive hover:underline"
                 >
-                    {buttonText === 'Login' ? 'Register' : 'Login'}
+                    {formType === 'login' ? 'Register' : 'Login'}
                 </Link>
             </FormDescription>
         </>

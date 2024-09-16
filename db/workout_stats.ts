@@ -1,7 +1,7 @@
 'use server';
 
 import { WorkoutStats } from "@/lib/schema";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/utils/supabase/server";
 
 import { getUserId } from "./user";
 

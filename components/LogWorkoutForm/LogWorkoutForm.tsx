@@ -14,7 +14,7 @@ import useUserWorkoutSessions from "@/hooks/useUserWorkoutSessions";
 import { saveExercises, saveWorkoutSession } from "@/db/workout_sessions";
 import { WorkoutSession as DbWorkoutSession, Exercise } from '@/db/types';
 import { WorkoutSession, WorkoutSessionSchema } from "@/lib/schema";
-import { optimisticUpdateSession, prepareNewSession, updateStats } from "@/lib/utils";
+import { optimisticUpdateSession, prepareNewSession, updateStats } from "@/lib/utils/workout_session";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import HIITWorkoutForm from "./HIITWorkoutForm";

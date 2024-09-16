@@ -1,7 +1,7 @@
 'use server'
 
 import { Exercise, WorkoutSession } from '@/db/types';
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/utils/supabase/server";
 import { Exercise as ExerciseSchema, WorkoutSession as WorkoutSessionSchema } from "@/lib/schema";
 
 import { getUserId } from "./user";

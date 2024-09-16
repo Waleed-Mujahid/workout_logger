@@ -1,15 +1,13 @@
-'use client'
+'use client';
+
 import { useForm } from 'react-hook-form';
-
-import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 
 import { signIn } from '@/db/auth';
 import LoginFields from '@/components/LoginFields';
 import FormButton from '@/components/shared/FormButton';
 import { LoginFormValues, LoginSchema } from '@/lib/schema';
-
+import { Form } from '@/components/ui/form';
 
 export default function Login({
     searchParams,
@@ -25,14 +23,14 @@ export default function Login({
             password: '',
         },
     });
+
     const {
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = form;
 
-
     async function onSubmit(data: LoginFormValues) {
-        await signIn(data);
+        await signIn(data); // Add error handling or navigation if necessary
     }
 
     return (
@@ -44,8 +42,13 @@ export default function Login({
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <LoginFields errors={errors} />
-                    {error && <span className="text-destructive text-md self-center">{error}</span>} <br />
-                    <FormButton buttonText="Login" />
+                    {error && (
+                        <span className="text-destructive text-md self-center">
+                            {error}
+                        </span>
+                    )}
+                    <br />
+                    <FormButton buttonText={isSubmitting ? 'Pending...' : 'Login'} formType="login" />
                 </form>
             </Form>
         </>
